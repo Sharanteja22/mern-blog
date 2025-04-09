@@ -10,7 +10,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Navbar className='border-b-2 flex flex-wrap justify-between items-center px-4 py-3'>
+    <Navbar className='border-b-2 flex flex-wrap justify-between items-center px-4 py-3 '>
       <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
         <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500'>
           Teja's
@@ -49,7 +49,7 @@ export default function Header() {
           <FaMoon />
         </Button>
         <Link to='/sign-in'>
-          <Button gradientduotone='purpleToBlue'>
+          <Button gradientduotone='purpleToBlue' outline>
             Sign In
           </Button>
         </Link>
