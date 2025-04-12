@@ -4,15 +4,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiSearch } from "react-icons/fi";
 import { FaMoon } from "react-icons/fa";
 import { HiMenu } from "react-icons/hi";
-import { useSelector } from 'react-redux';
-
+import { useSelector,useDispatch } from 'react-redux';
+import { toggleTheme } from '../redux/theme/themeSlice';
 export default function Header() {
   const { pathname } = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const dispatch= useDispatch();
   const handleClickOutside = (e) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setDropdownOpen(false);
@@ -25,7 +25,7 @@ export default function Header() {
   }, []);
 
   return (
-    <Navbar className='border-b-2 flex flex-wrap justify-between items-center px-4 py-3 '>
+    <Navbar className=' border-b-2 flex flex-wrap justify-between items-center px-4 py-3 '>
       <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
         <span className='px-2 py-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white rounded'>
           Teja's
@@ -58,7 +58,7 @@ export default function Header() {
       </div>
 
       <div className='flex items-center gap-2 relative'>
-        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
+        <Button className='w-12 h-10 hidden sm:inline' color='gray' pill onClick={()=>dispatch(toggleTheme())}>
           <FaMoon />
         </Button>
 
@@ -127,4 +127,3 @@ export default function Header() {
     </Navbar>
   );
 }
-  
