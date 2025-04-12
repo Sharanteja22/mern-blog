@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link,useNavigate } from "react-router-dom";
 import { signInFailure,signInStart,signInSuccess } from '../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import OAuth from '../components/OAuth';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -78,6 +79,7 @@ export default function SignIn() {
                 :'Sign In'
               }
             </Button>
+            <OAuth/>
           </form>
           <div className='pt-2'>Dont Have an account? <Link to='/sign-Up' className='underline text-blue-800'>Click Here!</Link></div>
             {
