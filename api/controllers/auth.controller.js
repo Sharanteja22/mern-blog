@@ -37,7 +37,7 @@ export const signin=async(req,res,next)=>{
             return next(errorHandler(401,'Invalid credentials'));
         }
         const {password:pass,...rest}=user._doc;
-
+        console.log(rest)
         const token=jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:'100d'});
         res.status(200).cookie('access_token',token,{httpOnly:true}).json(rest);
     } catch (error) {
