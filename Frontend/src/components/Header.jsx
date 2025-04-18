@@ -6,12 +6,15 @@ import { FaMoon } from "react-icons/fa";
 import { HiMenu } from "react-icons/hi";
 import { useSelector,useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/theme/themeSlice';
+import { signoutSuccess } from '../redux/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 export default function Header() {
   const { pathname } = useLocation();
   const { currentUser } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate=useNavigate();
   const dispatch= useDispatch();
   const handleClickOutside = (e) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -24,6 +27,23 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const hadnleSignout=async()=>{
+      try {
+        const res=await fetch('/api/user/signout',{
+            method:'POST'
+        })
+        const data=await res.json();
+        if(!res.ok){
+          console.log(data.message)
+        }else{
+          dispatch(signoutSuccess());
+          navigate('/sign-in')
+        }
+      } catch (error) {
+        console.log(error.message)  
+      }
+  
+    }  
   return (
     <Navbar className=' border-b-2 flex flex-wrap justify-between items-center px-4 py-3 '>
       <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
@@ -90,7 +110,7 @@ export default function Header() {
                   <hr className="my-1 border-gray-200" />
                   <li>
                     <button
-                      onClick={() => console.log('Logout clicked')}
+                      onClick={hadnleSignout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Logout

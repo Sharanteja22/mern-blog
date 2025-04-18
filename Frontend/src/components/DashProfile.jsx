@@ -1,6 +1,6 @@
 import { Alert, Button, TextInput } from 'flowbite-react';
 import React, { useState } from 'react';
-import { updateFailure,updateSuccess,updateStart,deleteUserFailure,deleteUserStart,deleteUserSuccess } from '../redux/user/userSlice';
+import { updateFailure,updateSuccess,signoutSuccess,updateStart,deleteUserFailure,deleteUserStart,deleteUserSuccess } from '../redux/user/userSlice';
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -43,6 +43,23 @@ export default function DashProfile() {
       setUpdateUserError(error);
     }
   }
+
+  const hadnleSignout=async()=>{
+    try {
+      const res=await fetch('/api/user/signout',{
+          method:'POST'
+      })
+      const data=await res.json();
+      if(!res.ok){
+        console.log(data.message)
+      }else{
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message)  
+    }
+
+  }  
   // console.log(formData)
   const handleDeleteUser=async ()=>{
     setShowModal(false);
@@ -99,7 +116,7 @@ export default function DashProfile() {
       </form>
       <div className="text-red-500 flex justify-between mt-5 w-full lg:w-3/4 mx-auto">
         <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>
-        <span className='cursor-pointer'>Sign Out</span>
+        <span onClick={hadnleSignout} className='cursor-pointer'>Sign Out</span>
       </div>
       {updateUserSuccess &&
         <Alert color='success' className='mt-5 lg:w-3/4 mx-auto'>{updateUserSuccess}</Alert>

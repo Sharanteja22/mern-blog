@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { HiUser, HiArrowSmRight } from 'react-icons/hi';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { signoutSuccess } from '../redux/user/userSlice';
 
 export default function DashSideBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [tab, setTab] = useState('');
-
+  const dispatch=useDispatch();
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get('tab');
@@ -19,6 +21,24 @@ export default function DashSideBar() {
     navigate(`?tab=${selectedTab}`);
   };
 
+  const hadnleSignout=async()=>{
+        try {
+          const res=await fetch('/api/user/signout',{
+              method:'POST'
+          })
+          const data=await res.json();
+          if(!res.ok){
+            console.log(data.message)
+          }else{
+            dispatch(signoutSuccess());
+            navigate('/sign-in')
+          }
+        } catch (error) {
+          console.log(error.message)  
+        }
+    
+      }  
+    
   return (
     <div className="w-full md:w-56 bg-gray-800 text-white flex flex-col md:min-h-screen ">
       
@@ -40,7 +60,7 @@ export default function DashSideBar() {
           {/* Sign Out */}
           <div className="flex items-center gap-3 p-3 bg-gray-700 rounded cursor-pointer hover:bg-gray-600">
             <HiArrowSmRight className="text-xl" />
-            <span className="text-sm font-semibold">Sign Out</span>
+            <span className="text-sm font-semibold" onClick={hadnleSignout}>Sign Out</span>
           </div>
         </div>
       </div>
