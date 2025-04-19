@@ -4,8 +4,9 @@ import { updateFailure,updateSuccess,signoutSuccess,updateStart,deleteUserFailur
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
 export default function DashProfile() {
-  const { currentUser ,error} = useSelector((state) => state.user); 
+  const { currentUser ,error, loading } = useSelector((state) => state.user); 
   const [formData,setFormData]=useState({});
   const [updateUserSuccess,setUpdateUserSuccess]=useState(null);
   const [updateUserError,setUpdateUserError]=useState(null);
@@ -112,7 +113,17 @@ export default function DashProfile() {
           className="w-full"
           onChange={handleChange}
         />
-        <Button type='submit' className='w-full bg-gradient-to-r from-purple-700 to-pink-500 text-white'>Update</Button>
+        <Button type='submit' className='w-full bg-gradient-to-r from-purple-700 to-pink-500 text-white' disabled={loading}>
+          {loading?'loading...':'Update'}
+          </Button>
+        {
+          currentUser.isAdmin &&
+          <Link to={'/create-post'} className='w-full'>
+              <Button type='button' className='w-full bg-gradient-to-r from-purple-700 to-pink-500 text-white'>
+                  Create a post
+              </Button>
+          </Link>
+        }
       </form>
       <div className="text-red-500 flex justify-between mt-5 w-full lg:w-3/4 mx-auto">
         <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>
