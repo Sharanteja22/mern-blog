@@ -37,8 +37,8 @@ export const signin=async(req,res,next)=>{
             return next(errorHandler(401,'Invalid credentials'));
         }
         const {password:pass,...rest}=user._doc;
-        console.log(rest)
-        const token=jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:'100d'});
+        // console.log(rest)
+        const token=jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.JWT_SECRET,{expiresIn:'100d'});
         res.status(200).cookie('access_token',token,{httpOnly:true}).json(rest);
     } catch (error) {
         return next(error);
@@ -51,7 +51,7 @@ export const google=async(req,res,next)=>{
         const user=await User.findOne({email});
         if(user){
             const {password,...rest}=user._doc;
-            const token=jwt.sign({id:user._id},process.env.JWT_SECRET,{expiresIn:'1 d'});
+            const token=jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.JWT_SECRET,{expiresIn:'1 d'});
             res.status(200).cookie('access_token',token,{httpOnly:true}).json(rest);
         }else{
             const generatedPassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
@@ -64,7 +64,7 @@ export const google=async(req,res,next)=>{
             });
             await newUser.save();
             const {password,...rest}=newUser._doc;
-            const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET,{expiresIn:'1 d'});
+            const token=jwt.sign({id:newUser._id,isAdmin:newUser.isAdmin},process.env.JWT_SECRET,{expiresIn:'1 d'});
             res.status(200).cookie('access_token',token,{httpOnly:true}).json(rest);
         }
     } catch (error) {
